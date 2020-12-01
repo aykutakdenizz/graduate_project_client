@@ -1,4 +1,4 @@
-package com.example.graduate_project_client
+package com.example.business_travel
 
 import io.flutter.embedding.android.FlutterActivity
 
