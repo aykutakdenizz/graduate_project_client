@@ -35,6 +35,14 @@ class DatabaseConnection {
     }
   }
 
+  static Future<void> deleteData(int id) async {
+    try {
+      await database.rawDelete('DELETE FROM Locations WHERE id=$id');
+    } on Exception catch (error) {
+      print("In database.dart deleteData function: " + error.toString());
+    }
+  }
+
   static Future<List<DbLocation>> getLocations() async {
     List<DbLocation> locationList = new List();
     List<Map> dblist = await database.rawQuery('SELECT * FROM Locations');

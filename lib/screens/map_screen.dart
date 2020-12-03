@@ -16,7 +16,6 @@ import 'package:provider/provider.dart';
 
 import '../models/location.dart';
 import '../services/database.dart';
-import '../services/location_service_repository.dart';
 
 class MapScreen extends StatefulWidget {
   static const String routeName = "/map_screen";
@@ -38,7 +37,6 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   void initState() {
-    initDatabase();
     _mapOptions = new MapOptions(
       center: new LatLng(
         41.001,
@@ -75,67 +73,12 @@ class _MapScreenState extends State<MapScreen> {
         ],),*/
       ],
     );
-
-    if (IsolateNameServer.lookupPortByName(
-            LocationServiceRepository.isolateName) !=
-        null) {
-      IsolateNameServer.removePortNameMapping(
-          LocationServiceRepository.isolateName);
-    }
-
-    IsolateNameServer.registerPortWithName(
-        port.sendPort, LocationServiceRepository.isolateName);
-
-    port.listen(
-      (dynamic data) async {
-        await updateUI(data);
-      },
-    );
-    initPlatformState();
-
-    Future.delayed(Duration.zero).then((_) {
-      final taskProvider = Provider.of<TaskProvider>(context, listen: false);
-      _selectedTask = taskProvider.task;
-    });
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
-  }
-
-  Future<void> initDatabase() async {
-    await DatabaseConnection.init();
-  }
-
-  Future<void> updateUI(LocationDto data) async {
-    await _updateNotificationText(data);
-  }
-
-  Future<void> _updateNotificationText(LocationDto data) async {
-    if (data == null) {
-      return;
-    }
-
-    await BackgroundLocator.updateNotificationText(
-        title: "new location received",
-        msg: "${DateTime.now()}",
-        bigMsg: "${data.latitude}, ${data.longitude}");
-    await DatabaseConnection.writeDb(
-        data.latitude, data.longitude, _selectedTask.id);
-  }
-
-  Future<void> initPlatformState() async {
-    print('Initializing...');
-    await BackgroundLocator.initialize();
-
-    print('Initialization done');
-    final _isRunning = await BackgroundLocator.isServiceRunning();
-    setState(() {
-      isRunning = _isRunning;
-    });
-    print('Running ${isRunning.toString()}');
   }
 
   Future<List<LatLng>> getLocationList(int taskId) async {
@@ -280,7 +223,7 @@ class _MapScreenState extends State<MapScreen> {
                 icon: Icon(Icons.details),
                 tooltip: 'Draw locations',
                 onPressed: () async {
-                  List<LatLng> list = await getLocationList(_selectedTask.id);
+                  List<LatLng> list = await getLocationList(1);
                   _drawLocations(list);
                   showColoredToast("Draw Completed");
                   print("Draw Completed");

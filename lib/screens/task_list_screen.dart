@@ -33,10 +33,6 @@ class _TaskListScreenState extends State<TaskListScreen> {
         break;
       case 1:
         break;
-      case 2:
-        break;
-      case 3:
-        break;
       default:
     }
   }
@@ -117,19 +113,11 @@ class _TaskListScreenState extends State<TaskListScreen> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.list_alt_outlined),
-            label: 'All',
+            label: 'Waiting Tasks',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.local_taxi),
-            label: 'Tranportation',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.local_restaurant),
-            label: 'Food',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.assignment_rounded),
-            label: 'Other',
+            icon: Icon(Icons.done_all),
+            label: 'Fineshed Tasks',
           ),
         ],
       ),
